@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (_) => const LoginScreen(),
         HomeScreen.routeName : (_) => const HomeScreen(),
       },
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.grey[300]
+      ),
     );
   }
 }
