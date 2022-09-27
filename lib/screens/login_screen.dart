@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:products_app/providers/login_form_provider.dart';
-import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/screens/screens.dart';
+import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/widgets/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -69,6 +69,7 @@ class _LoginForm extends StatelessWidget {
         /* Hacemos bind del key del formulario con el key del provider */
         key: loginForm.formKey,
 
+        /* Validaciones de los campos en base a la interaccion del usuario */
         autovalidateMode: AutovalidateMode.onUserInteraction,
         
         child: Column(
