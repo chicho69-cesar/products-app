@@ -16,7 +16,20 @@ class ProductCard extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           children: const [
             _BackgroundImage(),
+            
             _ProductDetails(),
+            
+            Positioned(
+              top: 0,
+              right: 0,
+              child: _Pricetag(),
+            ),
+
+            Positioned(
+              top: 0,
+              left: 0,
+              child: _NotAvaliable(),
+            ),
           ],
         ),
       ),
@@ -66,10 +79,101 @@ class _ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 50),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        width: double.infinity,
+        height: 70,
+        decoration: _buildBoxDecoration(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'Disco duro G', 
+              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              'Id del disco duro', 
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration _buildBoxDecoration() => const BoxDecoration(
+    color: Colors.indigo,
+    borderRadius: BorderRadius.only(
+      bottomLeft: Radius.circular(25),
+      topRight: Radius.circular(25)
+    )
+  );
+}
+
+class _Pricetag extends StatelessWidget {
+  const _Pricetag({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      alignment: Alignment.center,
+      width: 100,
       height: 70,
-      color: Colors.indigo,
+      decoration: const BoxDecoration(
+        color: Colors.indigo,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25),
+          bottomLeft: Radius.circular(25)
+        ),
+      ),
+      /* El widget fitted box nos ayuda a que el contenido que tiene dentro 
+      se va a adaptar segun la propiedad establecida, al igual que el fit de una
+      imagen cuando usamos cover, contain, etc. */
+      child: const FittedBox(
+        fit: BoxFit.contain,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text('\$103.99', style: TextStyle(color: Colors.white, fontSize: 20),),
+        ),
+      ),
+    );
+  }
+}
+
+class _NotAvaliable extends StatelessWidget {
+  const _NotAvaliable({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: sized_box_for_whitespace
+    return Container(
+      width: 100,
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.yellow[800],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25)
+        )
+      ),
+      child: const FittedBox(
+        fit: BoxFit.contain,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'No disponible',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ),
     );
   }
 }
