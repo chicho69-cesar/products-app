@@ -2,12 +2,14 @@ import 'dart:convert';
 
 class Product {
   Product({
+    this.id,
     required this.avaliable,
     required this.name,
     this.picture,
     required this.price,
   });
 
+  String? id;
   bool avaliable;
   String name;
   String? picture;
