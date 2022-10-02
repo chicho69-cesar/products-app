@@ -34,6 +34,8 @@ class _ProductsScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productFormProvider = Provider.of<ProductFormProvider>(context);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -79,8 +81,9 @@ class _ProductsScreenBody extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // todo: Store the product
+        onPressed: () async {
+          if (!productFormProvider.isValidForm()) return;
+          await productService.saveOrCreateProduct(productFormProvider.product);
         },
         child: const Icon(Icons.save_outlined),
       ),
@@ -106,6 +109,8 @@ class _ProductForm extends StatelessWidget {
         width: double.infinity,
         decoration: _buildBoxDecoration(),
         child: Form(
+          key: productForm.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
               const SizedBox(height: 10),
