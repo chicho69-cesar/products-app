@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 
+import 'package:products_app/providers/product_form_provider.dart';
 import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/services/services.dart';
 import 'package:products_app/widgets/widgets.dart';
@@ -15,9 +17,28 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final productService = Provider.of<ProductsService>(context);
 
+    return ChangeNotifierProvider(
+      create: (_) => ProductFormProvider(productService.selectedProduct),
+      child: _ProductsScreenBody(productService: productService),
+    );
+  }
+}
+
+class _ProductsScreenBody extends StatelessWidget {
+  const _ProductsScreenBody({
+    Key? key,
+    required this.productService,
+  }) : super(key: key);
+
+  final ProductsService productService;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          /* Mediante esta propiedad con este valor hacemos que el scroll se esconda al hacer scroll */
+          // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
               Stack(
@@ -75,6 +96,9 @@ class _ProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productForm = Provider.of<ProductFormProvider>(context);
+    final product = productForm.product;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
@@ -87,6 +111,12 @@ class _ProductForm extends StatelessWidget {
               const SizedBox(height: 10),
 
               TextFormField(
+                initialValue: product.name,
+                onChanged: (value) => product.name = value,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'el nombre es obligatorio';
+                  return null;
+                },
                 decoration: InputDecorations.authInputDecoration(
                   hintText: 'Nombre del producto', 
                   labelText: 'Nombre: '
@@ -96,6 +126,14 @@ class _ProductForm extends StatelessWidget {
               const SizedBox(height: 30),
 
               TextFormField(
+                initialValue: '${product.price}',
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                ],
+                onChanged: (value) {
+                  product.price = double.tryParse(value) == null 
+                    ? 0 : double.parse(value);
+                },
                 keyboardType: TextInputType.number,
                 decoration: InputDecorations.authInputDecoration(
                   hintText: '\$150', 
@@ -106,12 +144,14 @@ class _ProductForm extends StatelessWidget {
               const SizedBox(height: 30),
 
               SwitchListTile.adaptive(
-                value: true, 
+                value: product.avaliable, 
                 title: const Text('Disponible'),
                 activeColor: Colors.indigo,
-                onChanged: (value) {
-                  // todo: Pending
-                }
+
+                /* Cuando mandamos llamar una funcion que recibe un valor de un cierto tipo de dato
+                en lugar donde se espera la declaracion de una funcion con ese mismo tipo de dato, podemos
+                omitir el uso de los argumentos, ya que estos se sobreentenderan de forma explicita. */
+                onChanged: productForm.updateAvailability,
               ),
 
               const SizedBox(height: 30),
