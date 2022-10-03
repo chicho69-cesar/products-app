@@ -90,14 +90,17 @@ class _ProductsScreenBody extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+        onPressed: productService.isSaving
+        ? null 
+        : () async {
           if (!productFormProvider.isValidForm()) return;
-
           final String? imageUrl = await productService.uploadImage();
-
+          if (imageUrl != null) productFormProvider.product.picture = imageUrl;
           await productService.saveOrCreateProduct(productFormProvider.product);
         },
-        child: const Icon(Icons.save_outlined),
+        child: productService.isSaving
+        ? const CircularProgressIndicator(color: Colors.white)
+        : const Icon(Icons.save_outlined),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );

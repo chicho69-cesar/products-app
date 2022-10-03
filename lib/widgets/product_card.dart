@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:products_app/models/models.dart';
@@ -77,17 +79,30 @@ class _BackgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        child: urlImage == null
-        ? const Image(
-          image: AssetImage('assets/images/no-image.png'),
-          fit: BoxFit.cover,
-        )
-        : FadeInImage(
-          placeholder: const AssetImage('assets/images/jar-loading.gif'),
-          image: NetworkImage(urlImage!),
-          fit: BoxFit.cover,
-        ),
+        child: getImage(urlImage),
       ),
+    );
+  }
+
+  Widget getImage(String? picture) {
+    if (picture == null) {
+      return const Image(
+        image: AssetImage('assets/images/no-image.png'),
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (picture.startsWith('http')) {
+      return FadeInImage(
+        placeholder: const AssetImage('assets/images/jar-loading.gif'),
+        image: NetworkImage(urlImage!),
+        fit: BoxFit.cover,
+      );
+    }
+
+    return Image.file(
+      File(picture),
+      fit: BoxFit.cover,
     );
   }
 }
