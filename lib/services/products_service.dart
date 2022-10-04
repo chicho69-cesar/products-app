@@ -56,6 +56,8 @@ class ProductsService extends ChangeNotifier {
   }
 
   Future<String> updateProduct(Product product) async {
+    print('Hola ${ product.picture }');
+
     final url = Uri.https(_baseUrl, 'products/${product.id}.json');
     final response = await http.put(url, body: product.toJson());
     final decodedData = response.body; // respuesta de la api
@@ -67,6 +69,8 @@ class ProductsService extends ChangeNotifier {
   }
 
   Future<String> createProduct(Product product) async {
+    print('Hola ${ product.picture }');
+    
     final url = Uri.https(_baseUrl, 'products.json');
     final response = await http.post(url, body: product.toJson());
     final decodedData = json.decode(response.body); // respuesta de la api
@@ -93,7 +97,7 @@ class ProductsService extends ChangeNotifier {
     final url = Uri.parse('https://api.cloudinary.com/v1_1/dtqilcsm8/image/upload?upload_preset=uevgwln6');
 
     final imageUploadRequest = http.MultipartRequest('POST', url);
-    final file = await http.MultipartFile.fromPath('File', newPictureFile!.path);
+    final file = await http.MultipartFile.fromPath('file', newPictureFile!.path);
     imageUploadRequest.files.add(file);
 
     final streamResponse = await imageUploadRequest.send();
