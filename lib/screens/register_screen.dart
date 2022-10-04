@@ -7,10 +7,10 @@ import 'package:products_app/screens/screens.dart';
 import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/widgets/widgets.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
-  static String routeName = 'login';
+  static String routeName = 'register';
   
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,10 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 10),
                     
-                    Text('Login', style: Theme.of(context).textTheme.headline4),
+                    Text('Crear cuenta', style: Theme.of(context).textTheme.headline4),
                     
                     const SizedBox(height: 30),
                     
-                    /* Cuando envolvermos un formulario en un ChangeNotifierProvider lo que hacemos es que 
-                    el formulario tendra acceso a todo lo que nos provea el provider, esto con el fin de gestionar
-                    el estado global del formulario a traves de un provider */
                     ChangeNotifierProvider(
                       create: (_) => LoginFormProvider(),
                       child: _LoginForm(),
@@ -44,13 +41,13 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 50),
 
               TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, RegisterScreen.routeName), 
+                onPressed: () => Navigator.pushReplacementNamed(context, LoginScreen.routeName), 
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
                   shape: MaterialStateProperty.all(const StadiumBorder())
                 ),
                 child: const Text(
-                  'Crear una nueva cuenta',
+                  'Iniciar sesión',
                   style: TextStyle(fontSize: 18, color: Colors.black87),
                 ),
               ),
@@ -73,10 +70,8 @@ class _LoginForm extends StatelessWidget {
     // ignore: avoid_unnecessary_containers
     return Container(
       child: Form(
-        /* Hacemos bind del key del formulario con el key del provider */
         key: loginForm.formKey,
 
-        /* Validaciones de los campos en base a la interaccion del usuario */
         autovalidateMode: AutovalidateMode.onUserInteraction,
         
         child: Column(
