@@ -137,7 +137,7 @@ class _LoginForm extends StatelessWidget {
                   // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(context, HomeScreen.routeName);
                 } else {
-                  print(errorMessage);
+                  NotificationsService.showSnackBar('Error al crear la cuenta');
                   loginForm.isLoading = false;
                 }
               },
