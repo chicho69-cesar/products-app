@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:products_app/providers/login_form_provider.dart';
 import 'package:products_app/screens/screens.dart';
+import 'package:products_app/services/services.dart';
 import 'package:products_app/ui/input_decorations.dart';
 import 'package:products_app/widgets/widgets.dart';
 
@@ -124,16 +125,21 @@ class _LoginForm extends StatelessWidget {
 
               onPressed: loginForm.isLoading ? null : () async {
                 FocusScope.of(context).unfocus();
+                final authService = Provider.of<AuthService>(context, listen: false);
                 
                 if (!loginForm.isValidForm()) return;
                 
                 loginForm.isLoading = true;
-                await Future.delayed(const Duration(seconds: 2));
-                // todo: Validar si el login es correcto
-                loginForm.isLoading = false;
-
-                // ignore: use_build_context_synchronously
-                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                
+                final String? errorMessage = await authService.createUser(loginForm.email, loginForm.password);
+                
+                if (errorMessage == null) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                } else {
+                  print(errorMessage);
+                  loginForm.isLoading = false;
+                }
               },
 
               child: Container(
@@ -141,7 +147,7 @@ class _LoginForm extends StatelessWidget {
                 child: Text(
                   loginForm.isLoading 
                     ? 'Espere ...'
-                    : 'Ingresar',
+                    : 'Crear cuenta',
                   style: const TextStyle(color: Colors.white),
                 ),
               )
